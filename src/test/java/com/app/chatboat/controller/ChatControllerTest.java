@@ -1,6 +1,8 @@
 package com.app.chatboat.controller;
 
 import com.app.chatboat.dto.ChatMessage;
+import com.app.chatboat.dto.ChatRequest;
+import com.app.chatboat.enums.ExpertMode;
 import com.app.chatboat.service.ChatGptService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -132,5 +135,42 @@ class ChatControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.role").value("assistant"))
                 .andExpect(jsonPath("$.content").value("메시지가 너무 깁니다. 1000자 이내로 입력해주세요."));
+    }
+    
+    
+    @Test
+    @DisplayName("전문가 모드 목록 조회 테스트")
+    void shouldReturnExpertModes() throws Exception {
+        // when & then
+        mockMvc.perform(get("/api/chat/expert-modes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(4));
+    }
+    
+    @Test
+    @DisplayName("잘못된 전문가 모드 처리 테스트")
+    void shouldHandleInvalidExpertMode() throws Exception {
+        // given
+        var request = new ChatRequest("테스트 메시지", "user", "invalid-mode");
+        
+        // when & then
+        mockMvc.perform(post("/api/chat/expert")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    @DisplayName("전문가 모드 빈 메시지 처리 테스트")
+    void shouldHandleEmptyExpertMessage() throws Exception {
+        // given
+        var request = new ChatRequest("", "user", "java");
+        
+        // when & then
+        mockMvc.perform(post("/api/chat/expert")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest());
     }
 }

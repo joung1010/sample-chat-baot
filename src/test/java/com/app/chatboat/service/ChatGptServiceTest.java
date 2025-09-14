@@ -1,6 +1,7 @@
 package com.app.chatboat.service;
 
 import com.app.chatboat.config.OpenAiProperties;
+import com.app.chatboat.dto.ChatRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -112,11 +113,7 @@ class ChatGptServiceTest {
     @DisplayName("정상적인 메시지 처리 테스트 (Mock 설정)")
     void shouldProcessValidMessageWithMockSettings() {
         // given
-        when(openAiProperties.isValid()).thenReturn(true);
-        when(openAiProperties.apiKey()).thenReturn("test-api-key");
-        when(openAiProperties.model()).thenReturn("gpt-4o");
-        when(openAiProperties.maxTokens()).thenReturn(2000);
-        when(openAiProperties.temperature()).thenReturn(0.7);
+        when(openAiProperties.isValid()).thenReturn(false); // API 호출 방지
         
         String userMessage = "안녕하세요";
         
@@ -124,7 +121,64 @@ class ChatGptServiceTest {
         String result = chatGptService.sendMessage(userMessage);
         
         // then
-        // 실제 API 호출은 하지 않지만, 설정이 유효한 경우의 흐름을 테스트
-        assertThat(result).isNotNull();
+        // 설정이 유효하지 않으므로 에러 메시지 반환
+        assertThat(result).isEqualTo("서비스 설정에 문제가 있습니다. 관리자에게 문의해주세요.");
+    }
+    
+    @Test
+    @DisplayName("전문가 모드 메시지 처리 테스트")
+    void shouldProcessExpertModeMessage() {
+        // given
+        when(openAiProperties.isValid()).thenReturn(false); // API 호출 방지
+        
+        var request = new ChatRequest("Spring Boot 질문", "user", "java");
+        
+        // when
+        String result = chatGptService.sendMessageWithExpertMode(request);
+        
+        // then
+        // 설정이 유효하지 않으므로 에러 메시지 반환
+        assertThat(result).isEqualTo("서비스 설정에 문제가 있습니다. 관리자에게 문의해주세요.");
+    }
+    
+    @Test
+    @DisplayName("전문가 모드 빈 메시지 처리 테스트")
+    void shouldHandleEmptyExpertMessage() {
+        // given
+        var request = new ChatRequest("", "user", "java");
+        
+        // when
+        String result = chatGptService.sendMessageWithExpertMode(request);
+        
+        // then
+        assertThat(result).isEqualTo("메시지를 입력해주세요.");
+    }
+    
+    @Test
+    @DisplayName("전문가 모드 긴 메시지 처리 테스트")
+    void shouldHandleLongExpertMessage() {
+        // given
+        String longMessage = "a".repeat(1001);
+        var request = new ChatRequest(longMessage, "user", "java");
+        
+        // when
+        String result = chatGptService.sendMessageWithExpertMode(request);
+        
+        // then
+        assertThat(result).isEqualTo("메시지가 너무 깁니다. 1000자 이내로 입력해주세요.");
+    }
+    
+    @Test
+    @DisplayName("전문가 모드 유효하지 않은 설정 처리 테스트")
+    void shouldHandleInvalidSettingsInExpertMode() {
+        // given
+        when(openAiProperties.isValid()).thenReturn(false);
+        var request = new ChatRequest("Spring Boot 질문", "user", "java");
+        
+        // when
+        String result = chatGptService.sendMessageWithExpertMode(request);
+        
+        // then
+        assertThat(result).isEqualTo("서비스 설정에 문제가 있습니다. 관리자에게 문의해주세요.");
     }
 }

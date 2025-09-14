@@ -2,6 +2,8 @@ package com.app.chatboat.service;
 
 import com.app.chatboat.config.OpenAiProperties;
 import com.app.chatboat.dto.ChatMessage;
+import com.app.chatboat.dto.ChatRequest;
+import com.app.chatboat.enums.ExpertMode;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
@@ -39,6 +41,17 @@ public class ChatGptService {
         };
     }
     
+    /**
+     * 전문가 모드를 지원하는 메시지 전송
+     */
+    public String sendMessageWithExpertMode(ChatRequest chatRequest) {
+        return switch (validateInput(chatRequest.message())) {
+            case ValidationResult.Valid() -> processMessageWithExpertMode(chatRequest);
+            case ValidationResult.Empty() -> "메시지를 입력해주세요.";
+            case ValidationResult.TooLong() -> "메시지가 너무 깁니다. 1000자 이내로 입력해주세요.";
+        };
+    }
+    
     private String processMessage(String userMessage) {
         try {
             log.info("사용자 메시지 처리 시작: {}", userMessage);
@@ -67,6 +80,34 @@ public class ChatGptService {
         }
     }
     
+    private String processMessageWithExpertMode(ChatRequest chatRequest) {
+        try {
+            log.info("전문가 모드 메시지 처리 시작: {} (모드: {})", chatRequest.message(), chatRequest.expertMode());
+            
+            if (!openAiProperties.isValid()) {
+                log.error("OpenAI 설정이 유효하지 않습니다.");
+                return "서비스 설정에 문제가 있습니다. 관리자에게 문의해주세요.";
+            }
+            
+            var service = new OpenAiService(openAiProperties.apiKey(), TIMEOUT);
+            var messages = createMessagesWithExpertMode(chatRequest);
+            var request = createRequest(messages);
+            
+            var response = service.createChatCompletion(request)
+                    .getChoices()
+                    .getFirst()
+                    .getMessage()
+                    .getContent();
+            
+            log.info("전문가 모드 AI 응답 생성 완료");
+            return response;
+            
+        } catch (Exception e) {
+            log.error("전문가 모드 ChatGPT API 호출 중 오류 발생", e);
+            return getErrorMessage(e);
+        }
+    }
+    
     private List<com.theokanning.openai.completion.chat.ChatMessage> createMessages(String userMessage) {
         return List.of(
                 new com.theokanning.openai.completion.chat.ChatMessage(
@@ -76,6 +117,22 @@ public class ChatGptService {
                 new com.theokanning.openai.completion.chat.ChatMessage(
                         ChatMessageRole.USER.value(), 
                         userMessage
+                )
+        );
+    }
+    
+    private List<com.theokanning.openai.completion.chat.ChatMessage> createMessagesWithExpertMode(ChatRequest chatRequest) {
+        var expertMode = ExpertMode.fromCode(chatRequest.expertMode());
+        var systemPrompt = expertMode.getPrompt();
+        
+        return List.of(
+                new com.theokanning.openai.completion.chat.ChatMessage(
+                        ChatMessageRole.SYSTEM.value(), 
+                        systemPrompt
+                ),
+                new com.theokanning.openai.completion.chat.ChatMessage(
+                        ChatMessageRole.USER.value(), 
+                        chatRequest.message()
                 )
         );
     }
