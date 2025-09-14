@@ -150,6 +150,60 @@
             font-style: italic;
             margin-top: 50px;
         }
+        
+        .expert-mode-selector {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e5e9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .expert-mode-selector label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .expert-mode-select {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+            min-width: 150px;
+        }
+        
+        .expert-mode-select:focus {
+            border-color: #667eea;
+        }
+        
+        .mode-indicator {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .mode-indicator.java {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .mode-indicator.python {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .mode-indicator.javascript {
+            background: #fff8e1;
+            color: #f9a825;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +211,17 @@
         <div class="chat-header">
             <h1>🤖 ChatBot</h1>
             <p>AI와 대화해보세요!</p>
+        </div>
+        
+        <div class="expert-mode-selector">
+            <label for="expertModeSelect">전문가 모드:</label>
+            <select id="expertModeSelect" class="expert-mode-select">
+                <option value="general">일반 모드</option>
+                <option value="java">Java 전문가</option>
+                <option value="python">Python 전문가</option>
+                <option value="javascript">JavaScript 전문가</option>
+            </select>
+            <span id="modeIndicator" class="mode-indicator">일반 모드</span>
         </div>
         
         <div class="chat-messages" id="chatMessages">
@@ -190,6 +255,21 @@
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
         const loading = document.getElementById('loading');
+        const expertModeSelect = document.getElementById('expertModeSelect');
+        const modeIndicator = document.getElementById('modeIndicator');
+
+        // 전문가 모드 변경 이벤트
+        expertModeSelect.addEventListener('change', (e) => {
+            const selectedMode = e.target.value;
+            const selectedText = e.target.options[e.target.selectedIndex].text;
+            
+            // 모드 인디케이터 업데이트
+            modeIndicator.textContent = selectedText;
+            modeIndicator.className = `mode-indicator ${selectedMode}`;
+            
+            // 환영 메시지 업데이트
+            updateWelcomeMessage(selectedMode);
+        });
 
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -206,16 +286,35 @@
             sendButton.disabled = true;
 
             try {
-                const response = await fetch('/api/chat/message', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        role: 'user',
-                        content: message
-                    })
-                });
+                const selectedMode = expertModeSelect.value;
+                let response;
+                
+                if (selectedMode === 'general') {
+                    // 일반 모드
+                    response = await fetch('/api/chat/message', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            role: 'user',
+                            content: message
+                        })
+                    });
+                } else {
+                    // 전문가 모드
+                    response = await fetch('/api/chat/expert', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            role: 'user',
+                            expertMode: selectedMode
+                        })
+                    });
+                }
 
                 if (response.ok) {
                     const data = await response.json();
@@ -251,6 +350,19 @@
         function showLoading(show) {
             loading.style.display = show ? 'block' : 'none';
         }
+        
+        function updateWelcomeMessage(mode) {
+            const welcomeDiv = chatMessages.querySelector('.welcome-message');
+            if (welcomeDiv) {
+                const messages = {
+                    'general': '안녕하세요! 무엇을 도와드릴까요?',
+                    'java': '안녕하세요! Java 전문가 모드입니다. Spring Boot, JVM, 성능 최적화 등에 대해 질문해주세요!',
+                    'python': '안녕하세요! Python 전문가 모드입니다. Django, FastAPI, 데이터 분석 등에 대해 질문해주세요!',
+                    'javascript': '안녕하세요! JavaScript 전문가 모드입니다. React, Node.js, TypeScript 등에 대해 질문해주세요!'
+                };
+                welcomeDiv.textContent = messages[mode] || messages['general'];
+            }
+        }
 
         // 엔터키로 전송
         messageInput.addEventListener('keypress', (e) => {
@@ -258,6 +370,11 @@
                 e.preventDefault();
                 chatForm.dispatchEvent(new Event('submit'));
             }
+        });
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            updateWelcomeMessage('general');
         });
     </script>
 </body>
