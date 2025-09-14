@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: chatboat-test
+
+server:
+  port: 0  # 랜덤 포트 사용
+
+# 테스트용 OpenAI 설정
+openai:
+  api-key: test-api-key
+  model: gpt-4o
+  max-tokens: 200
+  temperature: 0.5
+
+# 테스트 환경 설정
+logging:
+  level:
+    com.app.chatboat: DEBUG
+    org.springframework.web: DEBUG
