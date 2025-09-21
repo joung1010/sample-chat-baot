@@ -312,6 +312,258 @@
             font-style: italic;
             color: #555;
         }
+        
+        /* PDF 관련 스타일 */
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 0 5px;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+        
+        .current-pdf-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 16px;
+            font-size: 14px;
+            color: #1976d2;
+        }
+        
+        .clear-pdf-btn {
+            background: none;
+            border: none;
+            color: #1976d2;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .clear-pdf-btn:hover {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .pdf-upload-section, .pdf-documents-section {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+        
+        .pdf-upload-header, .pdf-documents-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .pdf-upload-header h3, .pdf-documents-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .pdf-upload-content {
+            padding: 20px;
+        }
+        
+        .pdf-upload-area {
+            border: 2px dashed #e1e5e9;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafbfc;
+        }
+        
+        .pdf-upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .pdf-upload-area.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .upload-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .pdf-upload-progress {
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e1e5e9;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .pdf-documents-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .pdf-document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+        
+        .pdf-document-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+        
+        .pdf-document-info {
+            flex: 1;
+        }
+        
+        .pdf-document-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .pdf-document-meta {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .pdf-document-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .pdf-action-btn {
+            padding: 6px 12px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .pdf-action-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .pdf-action-btn.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .pdf-action-btn.danger {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .pdf-action-btn.danger:hover {
+            background: #c82333;
+            border-color: #bd2130;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -332,6 +584,37 @@
             <span id="modeIndicator" class="mode-indicator">일반 모드</span>
         </div>
         
+        <div class="pdf-upload-section" id="pdfUploadSection" style="display: none;">
+            <div class="pdf-upload-header">
+                <h3>📄 PDF 문서 업로드</h3>
+                <button id="closePdfUpload" class="close-btn">×</button>
+            </div>
+            <div class="pdf-upload-content">
+                <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;">
+                <div class="pdf-upload-area" id="pdfUploadArea">
+                    <div class="upload-icon">📁</div>
+                    <p>PDF 파일을 드래그하거나 클릭하여 업로드하세요</p>
+                    <p class="upload-hint">최대 10MB, PDF 파일만 지원</p>
+                </div>
+                <div class="pdf-upload-progress" id="pdfUploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">업로드 중...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pdf-documents-section" id="pdfDocumentsSection" style="display: none;">
+            <div class="pdf-documents-header">
+                <h3>📚 업로드된 PDF 문서</h3>
+                <button id="closePdfDocuments" class="close-btn">×</button>
+            </div>
+            <div class="pdf-documents-list" id="pdfDocumentsList">
+                <!-- PDF 문서 목록이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+        
         <div class="chat-messages" id="chatMessages">
             <div class="welcome-message">
                 안녕하세요! 무엇을 도와드릴까요?
@@ -339,6 +622,18 @@
         </div>
         
         <div class="chat-input-container">
+            <div class="input-actions">
+                <button id="uploadPdfBtn" class="action-btn" title="PDF 업로드">
+                    📄 PDF 업로드
+                </button>
+                <button id="viewPdfBtn" class="action-btn" title="PDF 문서 보기">
+                    📚 PDF 문서
+                </button>
+                <span id="currentPdfInfo" class="current-pdf-info" style="display: none;">
+                    현재 PDF: <span id="currentPdfName"></span>
+                    <button id="clearPdfBtn" class="clear-pdf-btn">×</button>
+                </span>
+            </div>
             <form class="chat-input-form" id="chatForm">
                 <input 
                     type="text" 
@@ -365,6 +660,24 @@
         const loading = document.getElementById('loading');
         const expertModeSelect = document.getElementById('expertModeSelect');
         const modeIndicator = document.getElementById('modeIndicator');
+        
+        // PDF 관련 요소들
+        const uploadPdfBtn = document.getElementById('uploadPdfBtn');
+        const viewPdfBtn = document.getElementById('viewPdfBtn');
+        const pdfUploadSection = document.getElementById('pdfUploadSection');
+        const pdfDocumentsSection = document.getElementById('pdfDocumentsSection');
+        const pdfFileInput = document.getElementById('pdfFileInput');
+        const pdfUploadArea = document.getElementById('pdfUploadArea');
+        const pdfUploadProgress = document.getElementById('pdfUploadProgress');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const pdfDocumentsList = document.getElementById('pdfDocumentsList');
+        const currentPdfInfo = document.getElementById('currentPdfInfo');
+        const currentPdfName = document.getElementById('currentPdfName');
+        const clearPdfBtn = document.getElementById('clearPdfBtn');
+        
+        // 현재 선택된 PDF ID
+        let currentPdfId = null;
 
         // 전문가 모드 변경 이벤트
         expertModeSelect.addEventListener('change', (e) => {
@@ -377,6 +690,58 @@
             
             // 환영 메시지 업데이트
             updateWelcomeMessage(selectedMode);
+        });
+        
+        // PDF 업로드 버튼 클릭
+        uploadPdfBtn.addEventListener('click', () => {
+            showPdfUploadSection();
+        });
+        
+        // PDF 문서 보기 버튼 클릭
+        viewPdfBtn.addEventListener('click', () => {
+            showPdfDocumentsSection();
+            loadPdfDocuments();
+        });
+        
+        // PDF 업로드 섹션 닫기
+        document.getElementById('closePdfUpload').addEventListener('click', hidePdfUploadSection);
+        
+        // PDF 문서 섹션 닫기
+        document.getElementById('closePdfDocuments').addEventListener('click', hidePdfDocumentsSection);
+        
+        // PDF 파일 선택
+        pdfFileInput.addEventListener('change', handleFileSelect);
+        
+        // PDF 업로드 영역 클릭
+        pdfUploadArea.addEventListener('click', () => {
+            pdfFileInput.click();
+        });
+        
+        // 드래그 앤 드롭 이벤트
+        pdfUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            pdfUploadArea.classList.add('dragover');
+        });
+        
+        pdfUploadArea.addEventListener('dragleave', () => {
+            pdfUploadArea.classList.remove('dragover');
+        });
+        
+        pdfUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            pdfUploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        });
+        
+        // 현재 PDF 클리어
+        clearPdfBtn.addEventListener('click', () => {
+            currentPdfId = null;
+            currentPdfInfo.style.display = 'none';
+            updateWelcomeMessage(expertModeSelect.value);
         });
 
         chatForm.addEventListener('submit', async (e) => {
@@ -397,7 +762,21 @@
                 const selectedMode = expertModeSelect.value;
                 let response;
                 
-                if (selectedMode === 'general') {
+                if (currentPdfId) {
+                    // PDF 참조 모드
+                    response = await fetch('/api/chat/pdf', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            role: 'user',
+                            pdfId: currentPdfId,
+                            expertMode: selectedMode
+                        })
+                    });
+                } else if (selectedMode === 'general') {
                     // 일반 모드
                     response = await fetch('/api/chat/message', {
                         method: 'POST',
@@ -500,6 +879,257 @@
             gfm: true
         });
 
+        // PDF 관련 함수들
+        function showPdfUploadSection() {
+            createOverlay();
+            pdfUploadSection.style.display = 'block';
+        }
+        
+        function hidePdfUploadSection() {
+            pdfUploadSection.style.display = 'none';
+            removeOverlay();
+            resetUploadForm();
+        }
+        
+        function showPdfDocumentsSection() {
+            createOverlay();
+            pdfDocumentsSection.style.display = 'block';
+        }
+        
+        function hidePdfDocumentsSection() {
+            pdfDocumentsSection.style.display = 'none';
+            removeOverlay();
+        }
+        
+        function createOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            overlay.id = 'overlay';
+            document.body.appendChild(overlay);
+            
+            overlay.addEventListener('click', () => {
+                hidePdfUploadSection();
+                hidePdfDocumentsSection();
+            });
+        }
+        
+        function removeOverlay() {
+            const overlay = document.getElementById('overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+        
+        function resetUploadForm() {
+            pdfFileInput.value = '';
+            pdfUploadArea.style.display = 'block';
+            pdfUploadProgress.style.display = 'none';
+            progressFill.style.width = '0%';
+        }
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        }
+        
+        async function handleFileUpload(file) {
+            // 파일 유효성 검사
+            if (!file.type.includes('pdf')) {
+                alert('PDF 파일만 업로드 가능합니다.');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('파일 크기는 10MB를 초과할 수 없습니다.');
+                return;
+            }
+            
+            // 업로드 UI 표시
+            pdfUploadArea.style.display = 'none';
+            pdfUploadProgress.style.display = 'block';
+            
+            // 진행률 시뮬레이션
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 90) progress = 90;
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `업로드 중... ${Math.round(progress)}%`;
+            }, 200);
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch('/api/pdf/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+                progressText.textContent = '처리 중...';
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // 성공 메시지 표시
+                    progressText.textContent = '업로드 완료!';
+                    
+                    setTimeout(() => {
+                        hidePdfUploadSection();
+                        // 자동으로 PDF 선택
+                        selectPdf(result.id, result.originalFileName);
+                    }, 1000);
+                    
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message || '업로드에 실패했습니다.');
+                }
+                
+            } catch (error) {
+                clearInterval(progressInterval);
+                console.error('Upload error:', error);
+                alert('업로드 중 오류가 발생했습니다: ' + error.message);
+                resetUploadForm();
+            }
+        }
+        
+        async function loadPdfDocuments() {
+            try {
+                const response = await fetch('/api/pdf/list');
+                if (response.ok) {
+                    const documents = await response.json();
+                    displayPdfDocuments(documents);
+                } else {
+                    throw new Error('PDF 문서 목록을 불러올 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('Load PDF documents error:', error);
+                alert('PDF 문서 목록을 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+        
+        function displayPdfDocuments(documents) {
+            pdfDocumentsList.innerHTML = '';
+            
+            if (documents.length === 0) {
+                pdfDocumentsList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">업로드된 PDF 문서가 없습니다.</p>';
+                return;
+            }
+            
+            documents.forEach(doc => {
+                const docElement = createPdfDocumentElement(doc);
+                pdfDocumentsList.appendChild(docElement);
+            });
+        }
+        
+        function createPdfDocumentElement(doc) {
+            const div = document.createElement('div');
+            div.className = 'pdf-document-item';
+            
+            const statusText = getStatusText(doc.status);
+            const uploadDate = new Date(doc.uploadedAt).toLocaleDateString('ko-KR');
+            
+            div.innerHTML = `
+                <div class="pdf-document-info">
+                    <div class="pdf-document-name">${doc.originalFileName}</div>
+                    <div class="pdf-document-meta">
+                        ${statusText} • ${formatFileSize(doc.fileSize)} • ${uploadDate}
+                    </div>
+                </div>
+                <div class="pdf-document-actions">
+                    <button class="pdf-action-btn primary" onclick="selectPdf(${doc.id}, '${doc.originalFileName}')">
+                        선택
+                    </button>
+                    <button class="pdf-action-btn" onclick="viewPdfSummary(${doc.id})">
+                        요약
+                    </button>
+                    <button class="pdf-action-btn danger" onclick="deletePdf(${doc.id})">
+                        삭제
+                    </button>
+                </div>
+            `;
+            
+            return div;
+        }
+        
+        function getStatusText(status) {
+            const statusMap = {
+                'UPLOADED': '업로드됨',
+                'PROCESSING': '처리 중',
+                'COMPLETED': '완료',
+                'FAILED': '실패'
+            };
+            return statusMap[status] || status;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function selectPdf(pdfId, fileName) {
+            currentPdfId = pdfId;
+            currentPdfName.textContent = fileName;
+            currentPdfInfo.style.display = 'flex';
+            
+            // 환영 메시지 업데이트
+            updateWelcomeMessage(expertModeSelect.value);
+            
+            // PDF 문서 섹션 닫기
+            hidePdfDocumentsSection();
+        }
+        
+        async function viewPdfSummary(pdfId) {
+            try {
+                const response = await fetch(`/api/pdf/${pdfId}/summary`);
+                if (response.ok) {
+                    const summary = await response.text();
+                    addMessage(`📄 PDF 요약:\n\n${summary}`, 'assistant');
+                } else {
+                    throw new Error('요약을 불러올 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('View PDF summary error:', error);
+                alert('PDF 요약을 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+        
+        async function deletePdf(pdfId) {
+            if (!confirm('정말로 이 PDF 문서를 삭제하시겠습니까?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/pdf/${pdfId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    // 현재 선택된 PDF라면 클리어
+                    if (currentPdfId === pdfId) {
+                        currentPdfId = null;
+                        currentPdfInfo.style.display = 'none';
+                        updateWelcomeMessage(expertModeSelect.value);
+                    }
+                    
+                    // 목록 새로고침
+                    loadPdfDocuments();
+                } else {
+                    throw new Error('삭제에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Delete PDF error:', error);
+                alert('PDF 삭제 중 오류가 발생했습니다.');
+            }
+        }
+        
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', () => {
             updateWelcomeMessage('general');

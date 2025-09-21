@@ -3,13 +3,15 @@ package com.app.chatboat.controller;
 import com.app.chatboat.dto.ChatMessage;
 import com.app.chatboat.dto.ChatRequest;
 import com.app.chatboat.enums.ExpertMode;
+import com.app.chatboat.repository.PdfDocumentRepository;
 import com.app.chatboat.service.ChatGptService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,15 +25,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Chat Controller 테스트
  */
-@WebMvcTest(ChatController.class)
+@SpringBootTest
+@AutoConfigureWebMvc
 @DisplayName("Chat Controller 테스트")
 class ChatControllerTest {
     
     @Autowired
     private MockMvc mockMvc;
     
-    @MockitoBean
+    @MockBean
     private ChatGptService chatGptService;
+    
+    @MockBean
+    private PdfDocumentRepository pdfDocumentRepository;
     
     @Autowired
     private ObjectMapper objectMapper;
