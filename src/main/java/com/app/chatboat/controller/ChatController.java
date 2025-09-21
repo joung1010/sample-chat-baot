@@ -2,6 +2,7 @@ package com.app.chatboat.controller;
 
 import com.app.chatboat.dto.ChatMessage;
 import com.app.chatboat.dto.ChatRequest;
+import com.app.chatboat.dto.PdfChatRequest;
 import com.app.chatboat.enums.ExpertMode;
 import com.app.chatboat.service.ChatGptService;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,22 @@ public class ChatController {
     public ResponseEntity<ExpertMode[]> getExpertModes() {
         return ResponseEntity.ok(ExpertMode.getAvailableModes());
     }
+    
+    /**
+     * PDF 문서를 참조한 채팅
+     */
+    @PostMapping("/pdf")
+    public ResponseEntity<ChatMessage> sendPdfMessage(@Valid @RequestBody PdfChatRequest request) {
+        return switch (validatePdfRequest(request)) {
+            case PdfValidationResult.Valid() -> processPdfRequest(request);
+            case PdfValidationResult.Invalid() -> ResponseEntity.badRequest()
+                    .body(ChatMessage.assistant("잘못된 요청입니다."));
+            case PdfValidationResult.Empty() -> ResponseEntity.badRequest()
+                    .body(ChatMessage.assistant("메시지를 입력해주세요."));
+            case PdfValidationResult.InvalidPdf() -> ResponseEntity.badRequest()
+                    .body(ChatMessage.assistant("PDF 문서를 찾을 수 없습니다."));
+        };
+    }
 
     private ResponseEntity<ChatMessage> processValidRequest(ChatMessage request) {
         try {
@@ -97,6 +114,24 @@ public class ChatController {
             ));
         }
     }
+    
+    private ResponseEntity<ChatMessage> processPdfRequest(PdfChatRequest request) {
+        try {
+            log.info("PDF 참조 메시지 수신: {} (PDF ID: {})", request.message(), request.pdfId());
+
+            String response = chatGptService.sendMessageWithPdf(request);
+            ChatMessage responseMessage = ChatMessage.assistant(response);
+
+            log.info("PDF 참조 AI 응답 생성 완료");
+            return ResponseEntity.ok(responseMessage);
+
+        } catch (Exception e) {
+            log.error("PDF 참조 챗봇 처리 중 오류 발생", e);
+            return ResponseEntity.ok(ChatMessage.assistant(
+                    "죄송합니다. 현재 서비스에 문제가 있습니다. 잠시 후 다시 시도해주세요."
+            ));
+        }
+    }
 
     private RequestValidationResult validateRequest(ChatMessage request) {
         if (request == null) {
@@ -125,6 +160,19 @@ public class ChatController {
         }
         return new ExpertValidationResult.Valid();
     }
+    
+    private PdfValidationResult validatePdfRequest(PdfChatRequest request) {
+        if (request == null) {
+            return new PdfValidationResult.Invalid();
+        }
+        if (request.message() == null || request.message().isBlank()) {
+            return new PdfValidationResult.Empty();
+        }
+        if (request.pdfId() == null) {
+            return new PdfValidationResult.InvalidPdf();
+        }
+        return new PdfValidationResult.Valid();
+    }
 
     @GetMapping("/health")
     public ResponseEntity<HealthStatus> healthCheck() {
@@ -144,5 +192,12 @@ public class ChatController {
         record Invalid() implements ExpertValidationResult {}
         record Empty() implements ExpertValidationResult {}
         record InvalidMode() implements ExpertValidationResult {}
+    }
+    
+    private sealed interface PdfValidationResult {
+        record Valid() implements PdfValidationResult {}
+        record Invalid() implements PdfValidationResult {}
+        record Empty() implements PdfValidationResult {}
+        record InvalidPdf() implements PdfValidationResult {}
     }
 }

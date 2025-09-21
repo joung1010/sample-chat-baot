@@ -28,7 +28,7 @@ Spring Boot를 활용한 ChatGPT 연동 챗봇 애플리케이션입니다.
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-### 2. 애플리케이션 실행
+### 2. 로컬 실행 (H2 데이터베이스)
 
 ```bash
 # 빌드
@@ -38,10 +38,29 @@ export OPENAI_API_KEY="your-api-key-here"
 ./gradlew bootRun
 ```
 
-### 3. 접속
+### 3. Docker Compose 실행 (PostgreSQL)
+
+```bash
+# 환경 변수 설정
+cp env.example .env
+# .env 파일에서 OPENAI_API_KEY 설정
+
+# Docker Compose로 실행
+docker-compose up -d
+
+# 로그 확인
+docker-compose logs -f
+
+# 중지
+docker-compose down
+```
+
+### 4. 접속
 
 - 웹 인터페이스: http://localhost:2800
 - REST API: http://localhost:2800/api/chat/message
+- H2 콘솔 (로컬): http://localhost:2800/h2-console
+- PostgreSQL (Docker): localhost:5432
 
 ## 🧪 테스트 실행
 

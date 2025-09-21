@@ -88,3 +88,5 @@ class ChatRequestTest {
         assertThat(pythonRequest.isExpertMode("python")).isTrue();
     }
 }
+
+

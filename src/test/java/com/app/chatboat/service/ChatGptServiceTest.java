@@ -2,6 +2,7 @@ package com.app.chatboat.service;
 
 import com.app.chatboat.config.OpenAiProperties;
 import com.app.chatboat.dto.ChatRequest;
+import com.app.chatboat.repository.PdfDocumentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +24,14 @@ class ChatGptServiceTest {
     @Mock
     private OpenAiProperties openAiProperties;
     
+    @Mock
+    private PdfDocumentRepository pdfDocumentRepository;
+    
     private ChatGptService chatGptService;
     
     @BeforeEach
     void setUp() {
-        chatGptService = new ChatGptService(openAiProperties);
+        chatGptService = new ChatGptService(openAiProperties, pdfDocumentRepository);
     }
     
     @Test
